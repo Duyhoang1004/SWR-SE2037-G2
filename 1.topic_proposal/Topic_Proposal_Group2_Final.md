@@ -22,6 +22,8 @@
 
 &#x20; - Dao Trong Tan
 
+
+
 \## 2. Proposed Title
 
 \- \*\*English title:\*\* Automated E-commerce Product Categorization System from Images using Convolutional Neural Networks (CNN).
