@@ -1,4 +1,4 @@
-# Paper 01 Summary: E-Commerce Product Image Classification using Transfer Learning
+# Paper 02 Summary: E-Commerce Product Image Classification using Transfer Learning
 
 ## 1. Citation
 
