@@ -11,7 +11,7 @@
 
 Bài báo giải quyết 3 vấn đề chính:
 
-1. **Phân loại sản phẩm thủ công rất TỐN THỜI GIKAN**
+1. **Phân loại sản phẩm thủ công rất TỐN THỜI GIAN**
    - Trang web bán hàng có hàng triệu sản phẩm
    - Nhân viên phải tự nhìn và xếp từng sản phẩm vào nhóm (quần/áo/giày)
    - Mất hàng tuần, dễ nhầm lẫn
