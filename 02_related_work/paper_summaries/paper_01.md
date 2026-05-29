@@ -2,203 +2,271 @@
 
 ## Citation
 
-**Tên bài:** Cross-Platform E-Commerce Product Categorization and Recategorization: A Multimodal Hierarchical Classification Approach  
-**Tác giả:** Jeremiah D. Gross, Rebecca Walter, Alessandro Gambetti, Maximilian Kaiser  
-**Năm:** 2025  
-**Nguồn:** IEEE BigData 2025 (Hội nghị về Big Data)  
-**DOI/Link:** https://ieeexplore.ieee.org/document/11402414 | https://arxiv.org/abs/2508.20013
+**Tên bài:** E-Commerce Product Categorization Using Machine Learning and Deep Learning Techniques  
+(Tên đầy đủ trong bài: "An Image-based Transfer Learning Framework for Classification of E-Commerce Products")  
+**Tác giả:** Vrushali Atul Surve  
+**Năm:** 2022  
+**Nguồn:** MSc Research Project, National College of Ireland  
+**DOI/Link:** https://norma.ncirl.ie/6322/1/vrushaliatulsurve.pdf
 
 ## Problem (Vấn đề bài báo giải quyết)
 
-Bài báo giải quyết 4 vấn đề chính:
+Bài báo giải quyết 3 vấn đề chính:
 
-1. **Sản phẩm cùng một thứ nhưng phân loại khác nhau trên các trang web khác nhau**
-   - Ví dụ: Một chiếc áo thun trên Amazon được xếp vào "Clothing > Men > Shirts", nhưng trên eBay lại ở "Fashion > Tops > T-Shirts"
-   - Điều này gây khó khăn khi so sánh sản phẩm giữa các trang
+1. **Phân loại sản phẩm thủ công tốn beaucoup thời gian**
+   - Ví dụ: Có 10,000 sản phẩm, nhân viên phải tự nhìn và xếp vào từng nhóm (áo/quần/giày)
+   - Làm thủ công thì mất hàng tuần, dễ sai sót
 
-2. **Khi cách phân loại thay đổi, cần cập nhật tự động**
-   - Ví dụ: Shopee thay đổi từ "Điện thoại" thành "Điện thoại & Phụ kiện", cần tự động chuyển sản phẩm cũ sang nhóm mới
+2. **Nhiều sản phẩm mới liên tục thêm vào**
+   - Trang web bán hàng có thêm sản phẩm mới mỗi ngày
+   - Không thể theo kịp nếu làm thủ công
 
-3. **Chỉ dùng ảnh HOẶC chỉ dùng chữ thì không đủ chính xác**
-   - Chỉ dùng ảnh: Không biết được màu sắc, chất liệu từ mô tả
-   - Chỉ dùng chữ: Không nhìn thấy hình dáng sản phẩm
-   - Cần kết hợp cả hai
-
-4. **Phải phân loại theo cấp bậc (to → nhỏ)**
-   - Không thể nhảy từ "Đồ dùng" xuống "Áo thun nam màu xanh" ngay
-   - Phải đi: Đồ dùng → Quần áo → Áo → Áo thun → Áo thun nam
+3. **Không biết mô hình AI nào là TỐT NHẤT**
+   - Có nhiều mô hình: CNN, VGG19, InceptionV3, ResNet50, MobileNet
+   - Chưa rõ mô hình nào vừa chính xác cao vừa chạy nhanh
 
 ## Method (Phương pháp/Làm như thế nào)
 
-Bài báo sử dụng **hệ thống kết hợp ảnh + chữ để phân loại sản phẩm tự động**:
+Bài báo so sánh **5 mô hình AI** để phân loại ảnh sản phẩm:
 
-### 1. Xử lý ảnh (CNN - mạng nơ-ron tích chập)
-- **Làm gì:** Nhìn vào ảnh sản phẩm
-- **Bắt chước như thế nào:** Giống như mắt người nhìn
-  - Nhìn tổng quát: Đây là cái gì? (quần/áo/giày)
-  - Nhìn chi tiết: Màu gì? Kiểu gì?
-- **Kết quả:** Lấy được đặc điểm từ ảnh (hình dáng, màu sắc, kiểu dáng)
+### 1. CNN (từ đầu)
+- **Là gì:** Mạng nơ-ron tích chập, học từ số 0
+- **Cách học:** Học trực tiếp từ ảnh sản phẩm, không dùng kiến thức có sẵn
+- **Nhược:** Mất nhiều thời gian học (2.5+ giờ), độ chính xác thấp
 
-### 2. Xử lý chữ (BERT - mô hình ngôn ngữ)
-- **Làm gì:** Đọc title, mô tả sản phẩm
-- **Ví dụ:** "Áo thun nam cotton ngắn tay màu xanh"
-- **Kết quả:** Biết được màu xanh, cotton, ngắn tay, nam
+### 2. Transfer Learning (học chuyển giao) - 4 mô hình
+**Ý tưởng:** Thay vì học từ đầu, dùng mô hình đã học sẵn trên hàng triệu ảnh (ImageNet), chỉ tinh chỉnh cho sản phẩm e-commerce
 
-### 3. Kết hợp ảnh + chữ
-- Ghép thông tin từ ảnh và chữ lại với nhau
-- Ví dụ: Ảnh cho thấy là áo + chữ ghi "áo thun cotton" = chắc chắn là áo thun cotton
+| Mô hình | Đặc điểm | Khi nào dùng |
+|---------|----------|--------------|
+| **VGG19** | 19 lớp, chính xác trung bình | Dataset nhỏ |
+| **InceptionV3** | 48 lớp, của Google, cân bằng giữa tốc độ và chính xác | Cần chính xác cao |
+| **ResNet50** | 50 lớp, có "skip connection" giúp học sâu được | Dataset lớn |
+| **MobileNet** | Nhẹ, chạy nhanh, dành cho điện thoại | Cần tốc độ cao |
 
-### 4. Phân loại theo cấp bậc (3 cấp)
-| Cấp | Ví dụ |
-|-----|-------|
-| Cấp 1 (lớn nhất) | Quần áo |
-| Cấp 2 (nhỏ hơn) | Áo thun |
-| Cấp 3 (nhỏ nhất) | Áo thun nam ngắn tay |
+### Quy trình 5 bước:
 
-### 5. Học từ trang này áp dụng sang trang khác
-- Học cách phân loại trên Amazon
-- Áp dụng sang eBay với ít chỉnh sửa nhỏ
-- Không cần học lại từ đầu
+1. **Thu thập dữ liệu**
+   - Lấy từ Kaggle: Dataset Flipkart e-commerce (20,000 sản phẩm)
+   - Crawl ảnh từ URL trong file CSV
+
+2. **Làm sạch dữ liệu**
+   - Gộp các nhóm con thành nhóm lớn (ví: "Áo thun nữ" + "Áo sơ mi nữ" → "Quần áo nữ")
+   - Xóa nhóm có quá ít sản phẩm
+   - Sau khi làm sạch: 15 nhóm, 7,755 ảnh
+
+3. **Tăng cường dữ liệu (Data Augmentation)**
+   - Tạo ảnh mới từ ảnh cũ bằng cách: lật ngang, lật dọc, xoay, làm mờ
+   - Từ 7,755 ảnh → 16,679 ảnh (đủ để train)
+
+4. **Chia dữ liệu**
+   - 70% để train (11,675 ảnh)
+   - 30% để test (5,004 ảnh)
+
+5. **Train và so sánh 5 mô hình**
+   - đo độ chính xác (accuracy)
+   - đo thời gian dự đoán (time per image)
+   - chọn mô hình TỐT NHẤT
 
 ## Dataset (Dữ liệu dùng)
 
 | Đặc điểm | Chi tiết |
 |----------|----------|
-| **Từ đâu** | Nhiều trang web bán hàng: Amazon, eBay, Shopify |
-| **Số lượng** | Hàng trăm nghìn đến hàng triệu sản phẩm |
-| **Số nhóm** | Phân thành nhiều cấp (category → subcategory → cụ thể) |
-| **Dữ liệu mỗi sản phẩm** | Ảnh + Tiêu đề + Mô tả + Thuộc tính (màu, size, chất liệu) |
-| **Đặc biệt** | Cùng 1 sản phẩm nhưng trên các trang web khác nhau có thể ở nhóm khác nhau |
+| **Nguồn** | Kaggle: Flipkart E-commerce Products Dataset  |
+| **Số lượng ban đầu** | ~20,000 sản phẩm, 15 cột dữ liệu |
+| **Sau khi làm sạch** | 15 nhóm, 7,755 ảnh |
+| **Sau khi augment** | 16,679 ảnh (tạo thêm bằng lật/xoay) |
+| **Số nhóm (classes)** | 15 nhóm: Quần áo nam, Quần áo nữ, Giày, Phụ kiện, Hương liệu, Văn phòng phẩm, v.v. |
+| **Kích thước ảnh** | 224x224 pixel (chuẩn cho CNN) |
+| **Chia train/test** | 70% train, 30% test |
 
 ## Evaluation (Đo lường như thế nào)
 
-### Các chỉ số dùng để đánh giá:
+### Các chỉ số dùng:
 
-| Chỉ số | Giải thích đơn giản | Mục đích |
-|--------|---------------------|----------|
-| **Độ chính xác (Accuracy)** | Trong 100 sản phẩm thì bao nhiêu cái phân loại đúng? | Đo tổng quan hệ thống tốt cỡ nào |
-| **F1-Score** | Trung bình độ chính xác của TẤT CẢ các nhóm | Đảm bảo không có nhóm nào quá tệ |
-| **Độ chính xác theo cấp bậc** | Phân loại đúng ở CẢ 3 cấp (lớn → nhỏ) | Kiểm tra xem có đúng cấp nhỏ nhất không |
-| **Precision@K** | Trong K kết quả đầu tiên thì bao nhiêu cái đúng | Kiểm tra thứ tự xếp hạng |
+| Chỉ số | Giải thích đơn giản | Công thức |
+|--------|---------------------|-----------|
+| **Accuracy (Độ chính xác)** | Trong 100 ảnh thì bao nhiêu ảnh phân loại đúng? | Đúng / Tổng số |
+| **Precision** | Trong số mô hình dự đoán là "Áo thun", bao nhiêu cái đúng? | True Positive / (True Positive + False Positive) |
+| **Recall** | Trong tất cả ảnh "Áo thun" thật, mô hình tìm được bao nhiêu? | True Positive / (True Positive + False Negative) |
+| **F1-Score** | Trung bình hài hòa giữa Precision và Recall | 2 × (Precision × Recall) / (Precision + Recall) |
+| **Thời gian** | Mất bao lâu để phân loại 1 ảnh? | giây/ảnh |
 
-### So sánh với các phương pháp khác:
-- Chỉ dùng ảnh (CNN)
-- Chỉ dùng chữ (BERT)
-- Phương pháp cũ (TF-IDF + SVM)
-- Phân loại không theo cấp bậc
+### So sánh:
+- CNN (train từ đầu)
+- VGG19 (transfer learning)
+- InceptionV3 (transfer learning)
+- ResNet50 (transfer learning)
+- MobileNet (transfer learning)
 
 ## Results (Kết quả)
 
+### Bảng so sánh 5 mô hình:
+
+| Mô hình | Độ chính xác | Thời gian trung bình | Thời gian train |
+|---------|--------------|---------------------|-----------------|
+| **CNN** | 51% | 0.426 giây/ảnh | >2.5 giờ |
+| **VGG19** | 55% | 0.146 giây/ảnh | <1 giờ |
+| **ResNet50** | 76% | 0.126 giây/ảnh | <1 giờ |
+| **InceptionV3** | **85%** | 0.137 giây/ảnh | <1 giờ |
+| **MobileNet** | **85%** | **0.101 giây/ảnh** | <1 giờ |
+
 ### Kết quả chính:
 
-| Mô hình | Độ chính xác | F1-Score | Đúng đủ 3 cấp |
-|---------|--------------|----------|---------------|
-| **Chỉ dùng ảnh** | ~90-92% | ~89-91% | ~85-88% |
-| **Chỉ dùng chữ** | ~88-90% | ~87-89% | ~83-86% |
-| **Ảnh + Chữ** | **~96-98%** | **~95-97%** | **~94-96%** |
-| **+ Theo cấp bậc** | **~97-99%** | **~96-98%** | **~95-97%** |
+1. **InceptionV3 và MobileNet đều đạt 85% độ chính xác** (cao nhất) 
+2. **MobileNet NHANH NHẤT**: 0.101 giây/ảnh (nhanh hơn InceptionV3) 
+3. **CNN chậm và kém chính xác nhất**: 51% accuracy, mất 2.5 giờ train 
+4. **VGG19 cũng thấp**: 55% accuracy 
 
-### Điều quan trọng phát hiện:
+### Chi tiết theo nhóm sản phẩm:
 
-1. **Kết hợp ảnh + chữ tốt hơn dùng riêng lẻ**
-   - Cải thiện độ chính xác ~6-8% so với chỉ dùng 1 thứ
+| Mô hình | Nhóm dự đoán tốt nhất | Precision | Recall | F1-Score |
+|---------|----------------------|-----------|--------|----------|
+| CNN | Hương liệu (Fragrance) | 100% | 92% | 83%  |
+| VGG19 | Hương liệu (Fragrance) | 100% | 99% | 99%  |
+| InceptionV3 | Quần áo nữ (Women-clothing) | 99% | 97% | 98%  |
+| ResNet50 | Văn phòng phẩm (School-supplies) | 99% | 91% | 92%  |
+| MobileNet | Quần áo nam (Men's-clothing) | 100% | 98% | 99% |
 
-2. **Phân loại theo cấp bậc tốt hơn không theo cấp bậc**
-   - Cải thiện ~2-3%
+### ĐIỀU QUAN TRỌNG PHÁT HIỆN:
 
-3. **Học từ trang này áp dụng sang trang khác được**
-   - Chỉ cần chỉnh sửa nhỏ, không cần học lại từ đầu
+1. **Transfer learning TỐT hơn train từ đầu**
+   - CNN (train từ đầu): 51%
+   - MobileNet (transfer): 85%
+   - Cải thiện **34%** độ chính xác 
 
-4. **Khi cách phân loại thay đổi, hệ thống tự động cập nhật đúng ~95%**
-   - 100 sản phẩm thì 95 sản phẩm được chuyển đúng nhóm mới
+2. **MobileNet là TỐT NHẤT tổng thể**
+   - Độ chính xác cao (85%) lại NHANH NHẤT (0.101 giây)
+   - Phù hợp cho điện thoại, web cần tốc độ cao 
+
+3. **InceptionV3 cũng rất tốt**
+   - Cũng 85% accuracy nhưng chậm hơn MobileNet chút
+   - Phù hợp khi cần độ chính xác cao hơn tốc độ 
 
 ## Limitations (Hạn chế)
 
-1. **Chi phí tính toán cao**
-   - Hệ thống nặng, cần máy tính mạnh
-   - Khó chạy trên điện thoại
+1. **CHỈ dùng ảnh, KHÔNG dùng chữ**
+   - Không dùng title, mô tả sản phẩm
+   - Nếu ảnh mờ/sai thì không có chữ để hỗ trợ 
 
-2. **Cần nhiều dữ liệu**
-   - Phải có hàng trăm nghìn sản phẩm đã được gắn nhãn
-   - Trong thực tế khó thu thập nhiều dữ liệu như vậy
+2. **Dataset nhỏ so với thực tế**
+   - Chỉ 16,679 ảnh, 15 nhóm
+   - Trang web thật có hàng triệu sản phẩm, hàng trăm nhóm 
 
-3. **Khi trang web khác quá khác biệt thì kết quả giảm**
-   - Ví dụ: Học từ Amazon (Mỹ) áp dụng sang trang Nhật Bản thì độ chính xác giảm
+3. **Một số nhóm chính xác thấp**
+   - Ví dụ: CNN chỉ 51% overall, có nhóm dự đoán sai nhiều
+   - Nhóm "Fragrance" bị dự đoán quá nhiều (false positive)
 
-4. **Sản phẩm mới khó phân loại**
-   - Sản phẩm mới chưa có đánh giá, ít ảnh → khó biết là gì
+4. **Chưa test trên nhiều nền tảng**
+   - Chỉ test trên dataset Flipkart (Ấn Độ)
+   - Chưa test trên Amazon, Shopee, Lazada 
 
-5. **Khó ánh xạ 1-1 giữa các trang web**
-   - Ví dụ: "Áo thun" trên Amazon có thể tương đương "Tops" trên eBay, không phải lúc nào cũng rõ ràng
-
-6. **Chạy chậm**
-   - Xử lý 1 sản phẩm mất thời gian
-   - Khó đáp ứng yêu cầu "nhanh" của trang web bán hàng
+5. **Ch chưa tối ưu hyperparameters**
+   - Chưa thử nhiều batch size, epoch khác nhau
+   - Có thể cải thiện thêm nếu tinh chỉnh kỹ hơn 
 
 ## Relevance to our topic (Liên quan gì đến đề tài nhóm)
 
 Bài báo **liên quan TRỰC TIẾP** đến đề tài nhóm "Automated E-commerce Product Categorization and Tagging System Using Convolutional Neural Networks":
 
-| Khía cạnh | Giải thích |
-|-----------|------------|
-| **Vấn đề cơ bản** | Cùng giải quyết việc tự động phân loại sản phẩm trên trang web bán hàng |
-| **Sử dụng CNN** | Dùng CNN để lấy đặc điểm từ ảnh sản phẩm (phần xử lý ảnh) |
-| **Ứng dụng** | Áp dụng thực tế cho các trang web bán hàng |
-| **Tự động hóa** | Tự động phân loại thay vì con người làm thủ công |
+| Khía cạnh | Sự liên quan |
+|-----------|--------------|
+| **Cùng vấn đề** | Tự động phân loại sản phẩm e-commerce bằng ảnh  |
+| **Cùng dùng CNN** | Sử dụng CNN và các biến thể (VGG, ResNet, MobileNet) |
+| **Ứng dụng thực tế** | Giúp trang web bán hàng tự động xếp sản phẩm  |
+| **Transfer learning** | Có thể áp dụng kỹ thuật này cho nhóm |
 
 ### Điểm nhóm có thể học từ bài báo:
 
-1. **Kết hợp ảnh + chữ**
-   - Không chỉ dùng CNN cho ảnh, mà còn dùng NLP cho chữ
-   - Sẽ chính xác hơn
+1. **Dùng transfer learning thay vì train từ đầu**
+   - Nhanh hơn, chính xác hơn
+   - MobileNet/InceptionV3 là lựa chọn tốt 
 
-2. **Phân loại theo cấp bậc**
-   - Không phân loại thẳng từ "Đồ dùng" → "Áo thun nam xanh"
-   - Mà đi từng cấp: "Đồ dùng" → "Quần áo" → "Áo" → "Áo thun" → "Áo thun nam"
+2. **So sánh nhiều mô hình trước khi chọn**
+   - Đừng chỉ dùng 1 mô hình, hãy thử nhiều cái rồi chọn TỐT NHẤT
+   - Bài báo đã so sánh 5 mô hình 
 
-3. **Học một lần áp dụng nhiều nơi**
-   - Học từ trang này, áp dụng sang trang khác
-   - Không cần học lại từ đầu
+3. **Data augmentation quan trọng**
+   - Tạo thêm ảnh từ ảnh cũ giúp mô hình học tốt hơn
+   - Bài báo tăng từ 7,755 → 16,679 ảnh
+
+4. **MobileNet là lựa chọn cân bằng**
+   - Vừa chính xác cao (85%) lại nhanh (0.101 giây)
+   - Phù hợp deploy thực tế 
 
 ## Possible improvement (Nhóm có thể cải tiến gì)
 
-### 1. Làm cho hệ thống NHẸ HƠN, CHẠY NHANH HƠN
-- **Thử CNN nhẹ:** MobileNet, ShuffleNet thay vì ResNet nặng
-- **Giảm kích thước mô hình:** Train mô hình lớn trước, sau đó ép nhỏ lại
-- **Nhanh hơn:** Giảm độ chính xác số (từ 32-bit xuống 8-bit)
+### 1. Kết hợp ảnh + chữ (Multimodal) - ĐỂ CẢI云端 WHOLE HỆ THỐNG
+- **Bài báo CHI NHisnya ảnh**, nhóm có thể thêm:
+  - Title sản phẩm ("Áo thun nam cotton")
+  - Mô tả ("Chất liệu cotton, ngắn tay, màu xanh")
+  - Thương hiệu (Nike, Adidas)
+- **Dùng BERT** để xử lý chữ, kết hợp với CNN cho ảnh
+- Dự kiến cải thiện accuracy thêm 5-10% 
 
-### 2. Kết hợp ảnh + chữ TỐT HƠN
-- **Dùng cơ chế chú ý:** Thay vì chỉ ghép đơn giản, cho mô hình tự quyết định phần nào quan trọng
-- **Thử nhiều cách ghép:** Ghép sớm hay ghép muộn?
-- **Thêm thông tin:** Giá cả, thương hiệu, đánh giá của khách, hành vi người mua
+### 2. Thử dataset lớn hơn, nhiều nhóm hơn
+- Lấy dataset từ Shopee, Lazada Việt Nam
+- Test trên 50-100 nhóm thay vì 15 nhóm
+- Gần với thực tế hơn 
 
-### 3. Xử lý khi NHÓM HIẾM (có nhóm có ít sản phẩm)
-- **Tạo thêm ảnh biến thể:** Xoay ảnh, đổi màu, crop ảnh
-- **Thay vì cross-entropy loss:** Dùng focal loss (trọng tâm vào nhóm hiếm)
-- **Lấy nhiều mẫu hơn** từ nhóm hiếm, lấy ít mẫu từ nhóm nhiều
+### 3. Tối ưu MobileNet cho tiếng Việt
+- Fine-tune MobileNet trên dataset tiếng Việt
+- Thử MobileNetV2, MobileNetV3 (phiên bản mới hơn)
+- Deploy lên điện thoại để test tốc độ thật 
 
-### 4. Cải thiện phân loại theo cấp bậc
-- **Bắt buộc hợp lý:** Nếu cấp nhỏ là "Áo thun nam" thì cấp lớn PHẢI là "Quần áo", không thể là "Giày dép"
-- **Cho phép không chắc chắn:** Ở cấp trung gian có thể không chắc 100%
-- **Tự động điều chỉnh:** Nếu confidence cao → đi sâu hơn, confidence thấp → dừng ở cấp cao
+### 4. Data augmentation thông minh hơn
+- Bài báo chỉ: lật ngang/dọc, xoay, làm mờ
+- Nhóm có thể thử:
+  - **Mixup**: Ghép 2 ảnh lại
+  - **CutMix**: Cắt 1 phần ảnh này dán vào ảnh khác
+  - **AutoAugment**: AI tự tìm cách augment TỐT NHẤT
+- Giúp mô hình robust hơn 
 
-### 5. Chạy NHANH cho thực tế
-- **Xử lý nhiều sản phẩm cùng lúc:** Không xử lý 1-by-1
-- **Ghi nhớ kết quả:** Sản phẩm phổ biến thì lưu kết quả, không cần tính lại
-- **Đặt máy chủ gần người dùng:** Giảm thời gian truyền dữ liệu
+### 5. Xử lý nhóm hiếm (class imbalance)
+- Bài báo: Nhóm "Fragrance" bị dự đoán quá nhiều
+- Giải pháp:
+  - **Focal loss**: Trọng tâm vào nhóm khó/h hiếm
+  - **Oversampling**: Lấy nhiều mẫu hơn từ nhóm hiếm
+  - **Undersampling**: Lấy ít mẫu từ nhóm nhiều
+- Giúp tất cả nhóm đều chính xác, không chỉ nhóm nhiều 
 
-### 6. Mở rộng hệ thống TAGGING (gắn nhãn)
-- **Nhiều nhãn hơn:** Không chỉ category, mà còn "hè", "thoải mái", "cổ điển"
-- **Tự động lấy thuộc tính:** Màu sắc, size, chất liệu, kiểu dáng
-- **Nhóm mô tả:** Dùng mô hình AI để tạo nhãn mô tả tự nhiên (ví dụ: "áo thun cotton phong cách trẻ trung")
+### 6. Phân loại theo cấp bậc (Hierarchical)
+- Bài báo: Phân loại thẳng 1 lớp (15 nhóm)
+- Nhóm có thể:
+  - Cấp 1: Quần áo → Cấp 2: Áo → Cấp 3: Áo thun
+  - Giúp chính xác hơn, dễ giải thích hơn
+- Like bài báo trước (IEEE) đã làm 
 
-### 7. Dataset và đánh giá
-- **Tạo dataset tiếng Việt:** Cho Shopee, Lazada Việt Nam
-- **Kiểm tra theo ngành:** Test riêng cho thời trang, điện tử, đồ gia dụng
-- **Thử nghiệm thật:** Deploy lên website thật, đo lường ảnh hưởng đến tỷ lệ mua hàng
+### 7. Tagging mở rộng (không chỉ category)
+- Bài báo: Chỉ phân loại category
+- Nhóm có thể thêm:
+  - **Màu sắc**: đỏ, xanh, đen
+  - **Chất liệu**: cotton, polyester, da
+  - **Kiểu dáng**: cổ tròn, cổ V, tay dài
+  - **Mục đích**: thể thao, đời thường, đi làm
+- Dùng multi-label classification 
 
-### 8. Giải thích tại sao (Explainability)
-- **Hiện vùng quan trọng:** Trong ảnh, vùng nào khiến mô hình quyết định đây là áo thun?
-- **Giải thích lý do:** Tại sao mô hình chọn "Áo thun nam" mà không phải "Áo sơ mi nam"?
-- **Độ tin cậy:** Nếu mô hình không chắc (confidence thấp) → chuyển cho con người kiểm tra
+### 8. Deploy thật và A/B testing
+- Deploy mô hình lên website thật
+- A/B test:
+  - Nhóm A: Phân loại thủ công (con người)
+  - Nhóm B: Phân loại bằng AI
+- Đo:
+  - Thời gian phân loại 1 sản phẩm
+  - Độ chính xác (con người check lại)
+  - Ảnh hưởng đến tỷ lệ mua hàng
 
+### 9. Giải thích tại sao (Explainability)
+- Bài báo: Không giải thích tại sao mô hình chọn "Áo thun"
+- Nhóm có thể:
+  - **Grad-CAM**: Hiện vùng ảnh quan trọng
+  - **LIME/SHAP**: Giải thích lý do
+  - Giúp nhân viên tin tưởng mô hình hơn
+
+### 10. Tiếp tục nghiên cứu multimodal fusion (như bài báo gợi ý)
+- Bài báo kết luận: "Future work sẽ nghiên cứu fusion với text"
+- Nhóm có thể làm điều này:
+  - InceptionV3 cho ảnh
+  - BERT/LSTM cho chữ
+  - Early Fusion vs Late Fusion
+  - Hy vọng accuracy lên 90%+
