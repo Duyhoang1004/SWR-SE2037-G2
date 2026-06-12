@@ -136,3 +136,4 @@ Sử dụng bộ dữ liệu ảnh sản phẩm mã nguồn mở trên Kaggle (F
 | #9 | Machine Learning-Enhanced Requirements Engineering: A Systematic Literature Review | 2024 | SCITEPRESS | [scitepress.org/Papers/2024/126881](https://www.scitepress.org/Papers/2024/126881/126881.pdf) |
 | #10 | Requirements Elicitation for Prototype-Driven AI Engineering | 2024 | CEUR-WS | [ceur-ws.org/Vol-3959/PT-paper4](https://ceur-ws.org/Vol-3959/PT-paper4.pdf) |
 | #11 | AI for Requirements Engineering: Industry Adoption and Challenges | 2025 | arXiv | [arXiv:2511.01324](https://arxiv.org/pdf/2511.01324) |
+| #12 | Status Quo and Problems of Requirements Engineering for Machine Learning: Results from an International Survey  | 2023 | arXiv |  (https://arxiv.org/pdf/2310.06726) |
